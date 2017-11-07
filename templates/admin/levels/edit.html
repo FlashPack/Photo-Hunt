@@ -1,0 +1,33 @@
+<script type="text/javascript" src="js/admin/image_edit.js"></script>
+{literal}
+<script type="text/javascript">
+$(function(){
+	get_data({/literal}{$lv_id}{literal});
+});
+</script>
+{/literal}
+<div class="breadcrumbs"><a href="admin.php">Control Panel</a> >> <a href="admin.php?view=levels">levels</a> >> Edit Level</div>
+{alerts id="alert1"}{/alerts}
+<br>
+<form method="post" enctype="multipart/form-data" action="admin.php?view=levels&action=new_level" name="step3_form">
+<div class="image_box" >
+<div  class="spacer" id="spacer1" style="width:{$settings.levels.image_width}px;height:{$settings.levels.image_height}px;" ></div>
+<img src="{$img1}" width="{$settings.levels.image_width}" height="{$settings.levels.image_width}" class="image" id="{$img1_id}" />
+</div>
+<div class="image_box">
+<div  id="spacer2" style="position:absolute;width:{$settings.levels.image_width}px;height:{$settings.levels.image_height}px;" ></div>
+<img src="{$img2}" width="{$settings.levels.image_width}" height="{$settings.levels.image_width}" class="image" id="{$img2_id}" />
+</div>
+<div class="track_box">
+	<div class="new_spots">
+	</div>
+	<div class="total">Total Spots : <span></span></div>
+	<br>
+	<div class="mouse_x">Mouse X:<span></span></div>
+	<div class="mouse_y">Mouse Y:<span></span></div>
+</div>
+<input type="hidden" name="_submit3" value="true" >
+<br clear="all" />
+<center>
+<input type="submit" name="step3_submit" value="Finish" >
+</center>

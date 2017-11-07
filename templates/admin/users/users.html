@@ -1,0 +1,93 @@
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('.delete_btn').click(function(){
+		_delete(this,'admin.php?view=users&action=delete&ajax=true','usr_id','#alert1');
+	});
+	$('select[name="action"]').change(function(){
+		if($(this).val()!='0'){
+			if($('.checkbox:checked').length>=1){
+				if($(this).val()=='delete_selected'){
+					if(confirm('Are you sure ? ')){
+						$('form[name="form1"]').submit();
+						$('#alert1').html('<br>');
+					}
+				}else{
+					$('form[name="form1"]').submit();
+					$('#alert1').html('<br>');
+				}
+			}else{
+				$('#alert1').html('Please Select at least one audio file');
+			}
+		}else{
+			$('#alert1').html('');
+		}
+	});
+});
+</script>
+{/literal}
+<center>
+<div class="breadcrumbs"><a href="admin.php">Control Panel</a> >> Users</div>
+{alerts id="alert1"}{/alerts}
+<div id="container"></div>
+<form method="post" name="form1">
+<table border="1" width="75%">
+<thead>
+<tr>
+	<th width="20">
+	<input type="checkbox" name="checkAll" value="checkbox" />
+	</th>
+	<th>
+	Name  
+	</th>
+	<th>
+	Username  
+	</th>
+	<th>
+	Email  
+	</th>
+	<th>
+	Total Score  
+	</th>
+	<th>
+	Played Levels
+	</th>
+	<th  width="50">
+	Delete 
+	</th>
+	
+</tr>
+</thead>
+{foreach from=$users item=user}
+<tr>
+	<td>
+	<input type="checkbox" class="checkbox" name="usr_ids[]" value="{$user.usr_id}"  />
+	</td>
+	<td>
+	{$user.usr_name}
+	</td>
+	{$user.usr_username}
+	</td>
+	<td>
+	{$user.usr_email}
+	</td>
+	<td>
+	{$user.total_score}
+	</td>
+	<td>
+	{$user.played_levels}
+	</td>
+	<td>
+	<a href="javascript:;" class="delete_btn" rel="{$user.usr_id}"><img src="{$template_dir}images/delete.png" /></a></td>
+</tr>
+{/foreach}
+</table>
+<div>{$pages}</div>
+<br>
+On Selected
+<select name="action">
+	<option value="0"></option>
+	<option value="delete_selected">Delete</option>
+</select>
+</form>
+</center>

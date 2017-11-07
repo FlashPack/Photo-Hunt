@@ -1,0 +1,191 @@
+{if $category_levels_count>=1}
+<head>
+<link rel="stylesheet" href="{$template_dir}css/play.css" media="all" />
+<link type="text/css" href="{$template_dir}ui-lightness/jquery-ui-1.8.2.custom.css" rel="stylesheet" />	
+<link rel="stylesheet" href="{$template_dir}css/style.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="js/game.js"></script>
+<script type="text/javascript" src="js/jquery.timer.js"></script>
+{if $settings.levels.bgmusic}
+<script language="JavaScript" src="js/audio-player.js"></script>
+{/if}
+{literal}
+<script type="text/javascript">
+//Disable Right Click 
+function clickIE4(){
+	if (event.button==2){
+		return false;
+	}
+}
+function clickNS4(e){
+	if (document.layers||document.getElementById&&!document.all){
+		if (e.which==2||e.which==3){
+			return false;
+		}
+	}
+}
+if (document.layers){
+	document.captureEvents(Event.MOUSEDOWN);
+	document.onmousedown=clickNS4;
+}else if (document.all&&!document.getElementById){
+	document.onmousedown=clickIE4;
+}
+document.oncontextmenu=new Function("return false;");
+//Game Intiltizing
+$(function(){
+	$('.game').game({
+		image1_id:'#img1',
+		image2_id:'#img2',
+		current_level_id:'#current_level',
+		total_levels_id:'#total_levels',
+		level_score_id:'#level_score',
+		game_score_id:'#game_score',
+		total_score_id:'#total_score',
+		spots_left_id:'#spots_left',
+		wrong_clicks_id:'#wrong_clicks',
+		spot_progress_id:'#spot_progress',
+		pause_dialog:'#pause_dialog',
+		level_report_dialog:'#level_report_dialog',
+		game_report_dialog:'#game_report_dialog',
+		loading_id:'#loading',
+		cat_id:$('input[name="cat_id"]').val(),
+		{/literal}
+		sound:{$settings.levels.bgmusic},
+		total_score:{$total_score},
+		allowed_hints:{$settings.levels.allowed_hints},
+		timer_duration:{$settings.levels.timer_duration},
+		allowed_pauses:{$settings.levels.allowed_pauses},
+		correct_click_score:{$settings.score_calc.correct_click},
+		unusedhints_score:{$settings.score_calc.unused_hints},
+		time_bonus_score:{$settings.score_calc.time_bonus},
+		wrong_click_p:{$settings.score_calc.wrong_click}
+		{literal}
+	});
+	$('#pause_dialog').dialog({
+		autoOpen: false,
+		width: 775,
+		height:500
+	});
+	$('#level_report_dialog').dialog({
+		autoOpen: false,
+		width: 500,
+		height:400
+	});
+	$('#game_report_dialog').dialog({
+		autoOpen: false,
+		width: 500,
+		height:400
+	});
+	sound=true;
+	$('#sound').click(function(){
+		if(sound==true){
+			sound=false;
+			$('#audioplayer1').hide();
+			$(this).html('Sound On');
+		}else{
+			sound=true;
+			$('#audioplayer1').show();
+			$(this).html('Sound Off');
+		}
+		return false;
+	})
+});
+</script>
+</head>
+{/literal}
+<div class="game">
+<div class="loading" id="loading"></div>
+<input type="hidden" name="cat_id" value="{$cat_id}" />
+<div class="left">
+<div class="box" id="current_level">Current Level :
+	<br><span>1</span>
+</div>
+<div class="box" id="total_levels">Total Levels :
+	<br><span>{$total_levels}</span>
+</div>
+</div>
+<div class="right">
+<div class="box" id="level_score">Level Score :
+	<br><span></span>
+</div>
+<div class="box" id="game_score">Game Score :
+	<br><span></span>
+</div>
+ <div class="box" id="total_score">Total Score : 
+	<br><span>{$total_score}</span>
+</div>
+</div>
+<center>
+<div class="buttons">
+	<a href="javascript:;" rel="pause">Pause Game</a> ||
+	{if $settings.levels.bgmusic}
+	<a href="javascript:;" id="sound">Sound Off</a> ||
+	{/if}
+	<a href="javascript:;" rel="new">New Game</a>
+</div>
+<div class="hints">
+	{section loop=$settings.levels.allowed_hints name=hint}
+	<a href="javascript:;" rel="unused"><img src="{$template_dir}images/help-icon.jpg" width="100" /></a>
+	{/section}
+</div>
+<div class="timer">Time left  : <span>{$settings.levels.timer_duration}</span></div>
+</center>
+<br clear="all" />
+<div class="spacer" id="spacer1" style="width:{$settings.levels.image_width}px;height:{$settings.levels.image_height}px;" ></div>
+<div id="img1" class="photo" >
+<img src="" width={$settings.levels.image_width}" height="{$settings.levels.image_height}" />
+</div>
+<div class="spacer" id="spacer2" style="width:{$settings.levels.image_width}px;height:{$settings.levels.image_height}px;" ></div>
+
+<div id="img2" class="photo">
+<img src="" width={$settings.levels.image_width}" height="{$settings.levels.image_height}" />
+</div>
+<br clear="all" />
+<div class="right" style="margin-top:20px;">
+<div class="box" id="spots_left">Spots Left : 
+	<br><span></span>
+</div>
+ <div class="box" id="wrong_clicks">Wrong Clicks
+	<br><span></span>
+</div>
+</div>
+<center>
+<div class="spot_progress" id="spot_progress">
+	<img src="{$template_dir}images/correct-icon.jpg" width="34" height="34" />
+</div>
+</center>
+<div id="pause_dialog" title="Game Pause">
+	<div class="remained_pauses">Remained Pauses : <span></span></div> <br>
+	<div class="allowed_pauses">Allowed Pauses : <span></span></div><br>
+	<input type="button" class="game_contine" value="contine" />
+</div>
+<div id="level_report_dialog" title="Level Report">
+	<div class="level_score">Level Score: <span></span></div> <br>
+	<div class="time_bonus">Time Bonus Score : <span></span></div><br>
+	<div class="unusedhints_bonus">Unused Hints Bonus : <span></span></div><br>
+	<hr>
+	<div class="level_total_score">Total Level Score : <span></span></div><br>
+	<input type="button" class="next_level" value="contine" />
+</div>
+<div id="game_report_dialog" title="Game Report">
+	<div class="game_score">Game Score: <span></span></div> <br>
+	<div class="total_score">Total Score: <span></span></div> <br>
+	<div class="played_levels">Played Levels : <span></span></div><br>
+	<div class="wrong_clicks">Wrong Clicks : <span></span></div><br>
+	<hr>
+		<input type="button" class="finish" value="Finish" /> <input type="button" class="new_game" value="New Game" />
+</div>
+{if $settings.levels.bgmusic}
+<object type="application/x-shockwave-flash" data="{$template_dir}player.swf" id="audioplayer1" height="1" width="1">
+<param name="movie" value="{$template_dir}player.swf">
+<param name="FlashVars" value="autostart=yes&playerID=audioplayer1&soundFile={$sound_file}">
+<param name="quality" value="high">
+<param name="menu" value="false">
+<param name="wmode" value="transparent">
+</object> 
+{/if}
+</div>
+{else}
+There is no levels
+{/if}

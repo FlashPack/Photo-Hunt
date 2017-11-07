@@ -1,0 +1,154 @@
+<link type="text/css" href="{$template_dir}/ui-lightness/jquery-ui-1.8.2.custom.css" rel="stylesheet" />	
+{literal}
+<script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#tabs').tabs();
+	$('input[name="submit_levels"]').click(function(){
+		if($('input[name="allowed_hints"]').val()=='' || $('input[name="timer_duration"]').val()=='' || $('input[name="image_width"]').val()=='' || $('input[name="image_height"]').val()==''){
+			$('#alert1').html('Please fill all fields');
+		}else if($('input[name="image_width"]').val()>375){
+			$('#alert1').html('Please reduce the image width below to 375px or below to fit the 1024 resolution\'s screens');
+		}else{
+			$('#alert1').html('');
+			return true ; 
+		}
+		return false;
+	});
+	$('input[name="submit_score"]').click(function(){
+		if($('input[name="correct_click"]').val()=='' || $('input[name="unused_hints"]').val()=='' || $('input[name="wrong_click"]').val()==''){
+			$('#alert1').html('Please fill all fields');
+		}else{
+			$('#alert1').html('');
+			return true ; 
+		}
+		return false;
+	});
+	$('input[name="submit_admin"]').click(function(){
+		if($('input[name="username"]').val()==''){
+			$('#alert1').html('The username is missing');
+		}else if($('input[name="current_password"]').val()!=''){
+			if( $('input[name="new_password"]').val()=='' || $('input[name="confirm_password"]').val()==''){
+				$('#alert1').html('To change to password you must enter the new password');
+			}else if( $('input[name="new_password"]').val()!=$('input[name="confirm_password"]').val()){
+				$('#alert1').html('The confirm password must match the new password');
+			}else{
+				$('#alert1').html('');
+				return true;
+			}
+		}else{
+			$('#alert1').html('');
+			return true ; 
+		}
+		return false;
+	});
+});
+</script>
+<style type="text/css">
+#tabs{ font: 80% "Trebuchet MS", sans-serif; margin: 50px;width:70%;text-align:left;}
+#tabs td,#tabs th{
+	text-align:left;
+}
+</style>
+{/literal}
+<center>
+<div class="breadcrumbs"><a href="admin.php">Control Panel</a> >> Settings</div>
+{alerts id="alert1"}{/alerts}
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Levels</a></li>
+		<li><a href="#tabs-2">Score Calculation</a></li>
+		<li><a href="#tabs-3">admin</a></li>
+	</ul>
+	<div id="tabs-1">
+		<form method="post" enctype="multipart/form-data" id="levels_form">
+		<table border="0" width="80%">
+		<tr>
+			<th width="150">Image Width</th>
+			<td><input type="text" name="image_width" size="10" value="{$settings.levels.image_width}" disabled="disabled"> Pixels </td>
+		</tr>
+		<tr>
+			<th width="150">Image Height</th>
+			<td><input type="text" name="image_height" size="10" value="{$settings.levels.image_height}"> Pixels </td>
+		</tr>
+		<tr>
+			<th width="150">Allowed Hints</th>
+			<td><input type="text" name="allowed_hints" size="10" value="{$settings.levels.allowed_hints}"> </td>
+		</tr>
+		<tr>
+			<th width="150">Timer Duration</th>
+			<td><input type="text" name="timer_duration" size="10" value="{$settings.levels.timer_duration}"> Seconds</td>
+		</tr>
+		<tr>
+			<th width="150">Allowed Pauses</th>
+			<td><input type="text" name="allowed_pauses" size="10" value="{$settings.levels.allowed_pauses}"> </td>
+		</tr>
+		<tr>
+			<th width="150">Background Music</th>
+			<td><input type="radio" name="bgmusic" value="1" {if $settings.levels.bgmusic eq 1}checked="checked"{/if}>  Enable <input type="radio" name="bgmusic" value="0" {if $settings.levels.bgmusic eq 0}checked="checked"{/if}> Disable </td>
+		</tr>
+        <tr>
+			<th width="150">Enable Guests Play</th>
+			<td><input type="radio" name="guest_mode" value="1" {if $settings.levels.guest_mode eq 1}checked="checked"{/if}>  Yes <input type="radio" name="guest_mode" value="0" {if $settings.levels.guest_mode eq 0}checked="checked"{/if}> No</td>
+		</tr>
+		<tr>
+			<input type="hidden" name="submit" value="levels" >
+			
+			<td colspan="2"><input type="submit" name="submit_levels" value="Save" > </td>
+		</tr>
+		</table>
+		</form>
+	</div>
+	<div id="tabs-2">
+		<form method="post" enctype="multipart/form-data" name="score_calc_form">
+		<table border="0" width="80%">
+		<tr>
+			<th width="150">Correct click</th>
+			<td> &nbsp;<input type="text" name="correct_click" size="10" value="{$settings.score_calc.correct_click}"> Points </td>
+		</tr>
+		<tr>
+			<th width="150">Unused hints</th>
+			<td>&nbsp;<input type="text" name="unused_hints" size="10" value="{$settings.score_calc.unused_hints}"> Bonus points for each unused hint</td>
+		</tr>
+		<tr>
+			<th width="150">Time bonus</th>
+			<td>&nbsp;<input type="text" name="time_bonus" size="10" value="{$settings.score_calc.time_bonus}"> Bonus points for each second</td>
+		</tr>
+		<tr>
+			<th width="150">Wrong Click</th>
+			<td>-<input type="text" name="wrong_click" size="10" value="{$settings.score_calc.wrong_click}"> % This percentage will be deducted from timer duration</td>
+		</tr>
+		<tr>
+			<input type="hidden" name="submit" value="score_calc" >
+			<td colspan="2"><input type="submit" name="submit_score" value="Save" > </td>
+		</tr>
+		</table>
+		</form>
+	</div>
+	<div id="tabs-3">
+		<form method="post" enctype="multipart/form-data" name="admin">
+		<table border="0" width="80%">
+		<tr>
+			<th width="150">Username</th>
+			<td> &nbsp;<input type="text" name="username" size="10" value="{$admin.admin_username}"> </td>
+		</tr>
+		<tr>
+			<th width="150">Current Password</th>
+			<td>&nbsp;<input type="password" name="current_password" size="10" value=""> Leave it if you don't want to change the password </td>
+		</tr>
+		<tr>
+			<th width="150">New Password</th>
+			<td>&nbsp;<input type="password" name="new_password" size="10" value=""> </td>
+		</tr>
+		<tr>
+			<th width="150">Confirm Password</th>
+			<td>&nbsp;<input type="password" name="confirm_password" size="10" value=""> </td>
+		</tr>
+		<tr>
+			<input type="hidden" name="submit" value="admin" >
+			<td colspan="2"><input type="submit" name="submit_admin" value="Save" > </td>
+		</tr>
+		</table>
+		</form>
+	</div>
+</center>

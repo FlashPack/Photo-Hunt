@@ -1,0 +1,25 @@
+body{
+	font: 100% "Trebuchet MS", sans-serif;
+}
+img{
+	border:0;
+}
+a{
+	color:#00000;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+.login{
+	float:left; 
+	width:350px;
+}
+.register{
+	float:left; 
+	width:350px;
+}
+.login label{
+	width:150px;
+	margin:10px;
+}

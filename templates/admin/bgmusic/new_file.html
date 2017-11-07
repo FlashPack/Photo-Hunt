@@ -1,0 +1,33 @@
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('input[name="step1_submit"]').click(function(){
+		if($('input[name="file"]').val()==0){
+			$('#alert1').html('The file is missing');
+		}else{
+			$('form[name="step1_form"]').submit();
+		}
+	});
+});
+</script>
+{/literal}
+<center>
+<div class="breadcrumbs"><a href="admin.php">Control Panel</a> >> <a href="admin.php?view=bgmusic">BgMusic</a> >> New File</div>
+{alerts id="alert1"}{/alerts}
+<form method="post" enctype="multipart/form-data" action="admin.php?view=bgmusic&action=new_file" name="step1_form">
+<table border="1" width="500">
+<tr>
+	<th>File Name</th>
+	<td><input type="text" name="bgmusic_name" value="{$_POST.bgmusic_name}"></td>
+</tr>
+<tr>
+	<th>File*</th>
+	<td><input type="file" name="file"></td>
+</tr>
+<tr><input type="hidden" name="_submit1" value="true" >
+	<td colspan="2"><input type="button" name="step1_submit" value="Save" > </td>
+</tr>
+
+</table>
+</form>
+</center>

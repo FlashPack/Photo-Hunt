@@ -1,0 +1,41 @@
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('input[name="cancel"]').click(function(){
+		$('#container').html('')
+	});
+	$('input[name="submit_category"]').click(function(){
+		if($('input[name="cat_name"]').val()==''){
+			$('#alert1').html('Category Name is missing');
+		}else{
+			$('form[name="form2"]').submit();
+		}
+		
+	});
+});
+</script>
+{/literal}
+<form method="post" enctype="multipart/form-data" name="form2">
+<table border="1" width="500">
+<tr>
+	<th>Category Name *</th>
+	<td><input type="text" name="cat_name" value="{$_POST.cat_name}"></td>
+</tr>
+<tr>
+	<th>Category Description</th>
+	<td><textarea name="cat_description">{$_POST.cat_description}</textarea></td>
+</tr>
+<tr>
+	<th>Category Thumbnail</th>
+	<td><input type="file" name="cat_thumbnail"></td>
+</tr>
+<tr>
+	<th>Active</th>
+	<td><input type="checkbox" name="cat_status" {if $_POST.cat_status || !isset($_POST.cat_status)} checked="checked"{/if}>Yes</td>
+</tr>
+<tr><input type="hidden" name="_submit" value="true" >
+	<td colspan="2"><input type="button" name="submit_category" value="Save" > <input type="button" name="cancel" value="Cancel" ></td>
+</tr>
+
+</table>
+</form>

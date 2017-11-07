@@ -1,0 +1,57 @@
+{literal}
+<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('input[name="login"]').click(function(){
+		if($('.login input[name="username"]').val()==''){
+			$('#alert1').html('Please enter the username');
+		}else if($('.login input[name="password"]').val()==''){
+			$('#alert1').html('Please enter the password');
+		}else{
+			$('#alert1').html('');
+			return true ; 
+		}
+		return false;
+	});
+	
+	$('input[name="register"]').click(function(){
+		if($('.register input[name="username"]').val()==''){
+			$('#alert1').html('Please enter the username');
+		}else if($('.register input[name="password"]').val()==''){
+			$('#alert1').html('Please enter the password');
+		}else if($('.register input[name="confirm_password"]').val()==''){
+			$('#alert1').html('Please confirm the password');
+		}else if($('.register input[name="confirm_password"]').val()!=$('.register input[name="password"]').val()){
+			$('#alert1').html('The cofirm password must match the password');
+		}else if($('.register input[name="email"]').val()==''){
+			$('#alert1').html('Please please enter your email');
+		}else{
+			$('#alert1').html('');
+			return true ; 
+		}
+		return false;
+	});
+});
+</script>
+{/literal}
+<link rel="stylesheet" href="{$template_dir}css/style.css" media="all" />
+<center>{alerts id="alert1"}{/alerts}</center>
+<div class="login">
+	<h3>Login</h3>
+	<form method="post" form="login">
+	<div class="label">Username:</div> <input type="text" name="username" /><br>
+	<div class="label">Password:</div> <input type="password" name="password" /><br>
+	<input type="submit" name="login" value="Login" />
+	</form>
+</div>
+<div class="Register">
+	<h3>Register</h3>
+	<form method="post" name="register">
+	<div class="label">Your Name:</div> <input type="text" name="name" value="{$_POST.name}" /><br>
+	<div class="label">Username:</div> <input type="text" name="username" value="{$_POST.username}"  /><br>
+	<div class="label">Password:</div><input type="password" name="password"  /><br>
+	<div class="label">Confirm Password:</div> <input type="password" name="confirm_password" /><br>
+	<div class="label">Email:</div> <input type="email" name="email" value="{$_POST.email}"  /><br>
+	<input type="submit" name="register" value="Register" />
+	</form>
+</div>

@@ -1,0 +1,146 @@
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('.cat_active').click(function(){
+		_activate(this,'admin.php?view=categories&action=activate&ajax=true','cat_id');
+	});
+	$('.delete_btn').click(function(){
+		_delete(this,'admin.php?view=categories&action=delete&ajax=true','cat_id','#alert1');
+	});
+	$('td').click(function(){
+		if($(this).find('.text').html()!=null){
+			$(this).find('.edit').show();
+			$(this).find('.text').hide();
+		}
+	});
+	$('input[name="save"]').click(function(){
+		selector=$(this).parent().children();
+		selector.each(function(){
+			if($(this).attr('type')!='button' && $(this)[0].nodeName!='BR'){
+				parent=$($(this).parent()).parent();
+				tds=$(parent).parent().children();
+				cat_id=$(tds[0]).find('input').val();
+				field=$(this).attr('name');
+				value=$(this).val();
+				$.ajax({
+					type:'post',
+					url:'admin.php?view=categories&action=update&ajax=true',
+					data:'cat_id='+cat_id+'&'+field+'='+value,
+					beforeSend:function(){
+						$('#alert1').html('<img src="templates/images/loading.gif" />');
+					},
+					success:function(response){
+						$('#alert1').html('<br>');
+						parent.find('.edit').hide();
+						parent.find('.text').html(value).show();
+					}
+				})
+			}
+		});
+	});
+	
+	$('select[name="action"]').change(function(){
+		if($(this).val()!='0'){
+			if($('.checkbox:checked').length>=1){
+				if($(this).val()=='delete_selected'){
+					if(confirm('Are you sure ? ')){
+						$('form[name="form1"]').submit();
+						$('#alert1').html('<br>');
+					}
+				}else{
+					$('form[name="form1"]').submit();
+					$('#alert1').html('<br>');
+				}
+			}else{
+				$('#alert1').html('Please Select at least one category');
+			}
+		}else{
+			$('#alert1').html('');
+		}
+	});
+	$('#new_cat_btn,.thumbnail_change').click(function(){
+		if($('#container').html()=='') get_page($(this).attr('href'),'#container');
+		return false;
+	});
+	{/literal}
+	{if $alerts}
+		get_page($('#new_cat_btn').attr('href'),'#container');
+	{/if}
+	{literal}
+});
+</script>
+{/literal}
+<center>
+<div class="breadcrumbs"><a href="admin.php">Control Panel</a> >> Categories</div>
+{alerts id="alert1"}{/alerts}
+<div id="container"></div>
+<a href="admin.php?view=categories&action=new_category&ajax=true" id="new_cat_btn">New Categoey</a>
+<form method="post" name="form1" action="admin.php?view=categories">
+<table border="1" width="75%">
+<thead>
+<tr>
+	<th width="20">
+	<input type="checkbox" name="checkAll" value="checkbox" />
+	</th>
+	<th width="20%">
+	Category Name  
+	</th>
+	<th width="50%">
+	Description  
+	</th>
+	<th>
+	Thumbnail  
+	</th>
+	<th>
+	Levels  
+	</th>
+	<th  width="50">
+	Active 
+	</th>
+	</th>
+	<th  width="50">
+	Delete 
+	</th>
+</tr>
+</thead>
+{foreach from=$categories item=category}
+<tr>
+	<td>
+	<input type="checkbox" class="checkbox" name="cat_ids[]" value="{$category.cat_id}"  />
+	</td>
+	<td>
+	<a href="javascript:;" class="text">{$category.cat_name}</a>
+	<div class="edit"><input type="text" name="cat_name" value="{$category.cat_name}" size="15" /> <br><input type="button" name="save" value="Save"></div>
+	</td>
+	<td>
+	<div class="text">
+	{$category.cat_description}
+	</div>
+	<div class="edit"><textarea name="cat_description" >{$category.cat_description}</textarea><br> <input type="button" name="save" value="Save"></div>
+	&nbsp;
+	
+	</td>
+	<td>
+	<a href="admin.php?view=categories&action=thumbnail_form&ajax=true&cat_id={$category.cat_id}" class="thumbnail_change" title="click to change"><img src="{$category_dir}{if $category.cat_thumbnail}{$category.cat_thumbnail}{else}default.jpg{/if}" width="100" height="100" /></a> &nbsp;
+	</td>
+	<td>
+	{if $category.levels}{$category.levels}{else}0{/if} &nbsp;
+	</td>
+	<td>
+	<input type="checkbox"  class="cat_active" rel="{$category.cat_id}" {if $category.cat_status} checked="checked" {/if}  />
+	</td>
+	<td>
+	<a href="javascript:;" class="delete_btn" rel="{$category.cat_id}"><img src="{$template_dir}images/delete.png" /></a></td>
+</tr>
+{/foreach}
+</table>
+<br>
+On Selected 
+<select name="action">
+	<option value="0"></option>
+	<option value="delete_selected">Delete</option>
+	<option value="activate_selected">Activate</option>
+	<option value="deactivate_selected">Deactivate</option>
+</select>
+</form>
+</center>

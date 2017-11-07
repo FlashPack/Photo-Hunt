@@ -1,0 +1,7 @@
+<div class="{if $params.border}alert_border{/if} alert" id="{$params.id}" {if $alerts}style="display:block"{/if}>
+{foreach from=$alerts item=alert}
+{$alert}<br />
+{foreachelse}
+{$alert}
+{/foreach}
+</div>

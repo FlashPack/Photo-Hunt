@@ -1,0 +1,44 @@
+<table align="center" width="50%"><tr><td>
+<form method="post"  >
+{alerts}{/alerts}
+<table width="100%" border="0" cellspacing="1" cellpadding="0" >
+  <tr>
+    <th scope="col" width="29%" ><div align="left" class="label">Username :</div></th>
+	<td width="71%" scope="col" ><div align="left" ><span class="font">
+      <input type="text" name="username" class="inputtext" id="textfield" size="20" value="{$username}" />
+    </span></div></td>
+  </tr>
+  <tr>
+    <th scope="col">&nbsp;</th>
+    <th scope="col">&nbsp;</th>
+  </tr>
+  <tr>
+       <th scope="col"><div align="left" class="label">Password :</div></th>
+	   <td scope="col"><div align="left"><span class="font">
+         <input type="password" name="password" class="inputtext" id="password" size="20" />
+      </span></div></td>
+  </tr>
+  <tr>
+    <th scope="col">&nbsp;</th>
+    <th scope="col">&nbsp;</th>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div  align="left">
+        </div></td>
+    </tr>
+</table>
+<center> <input type="submit" name="login"  value="Login" class="button"/></center>
+</form>
+</td></tr></table>
+{literal}
+<script type="text/javascript">
+$(function(){
+	{/literal}
+	{if $alert}
+		$('.alert').show();
+	{/if}
+	{literal}
+});
+</script>
+{/literal}

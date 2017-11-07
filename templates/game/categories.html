@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="{$template_dir}css/play.css" media="all" />
+<link rel="stylesheet" href="{$template_dir}css/style.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('.category a').click(function(){
+		width=Number({/literal}{$image_width}{literal}*2+100);
+		window.open('?view=play&cat_id='+$(this).attr('rel')+'', "play_window","location=0,resizable=0,status=0,scrollbars=1,width="+width+",height=700");
+		return false;
+	})
+});
+</script>
+{/literal}
+<center>
+{foreach from=$categories item=category}
+<div class="category">
+	<form name="category_form{$category.cat_id}" method="post" >
+	<input type="hidden" name="action" value="start" />
+	<input type="hidden" name="cat_id" value="{$category.cat_id}" />
+	<a href="javascript:;" rel="{$category.cat_id}">
+	<img align="left" src="{$category_dir}{if $category.cat_thumbnail}{$category.cat_thumbnail}{else}default.jpg{/if}" width="100" height="100" /> {$category.cat_name} ({if $category.level_count}{$category.level_count}{else}0{/if}) </a><br>
+	{$category.cat_description}
+	</form>
+</div>
+{/foreach}

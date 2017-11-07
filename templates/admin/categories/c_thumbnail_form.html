@@ -1,0 +1,28 @@
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('input[name="cancel"]').click(function(){
+		$('#container').html('')
+	});
+	$('input[name="submit_category"]').click(function(){
+		if($('input[name="cat_thumbnail"]').val()==''){
+			$('#alert1').html('Image is missing');
+		}else{
+			$('form[name="form3"]').submit();
+		}
+	});
+});
+</script>
+{/literal}
+<form method="post" action="admin.php?view=categories&action=thumbnail_change&cat_id={$cat_id}" enctype="multipart/form-data" name="form3">
+<table border="1" width="500">
+<tr>
+	<th>Category Thumbnail</th>
+	<td><input type="file" name="cat_thumbnail"></td>
+</tr>
+<tr><input type="hidden" name="_submit_thumbnail" value="true" >
+	<td colspan="2"><input type="button" name="submit_category" value="Save" > <input type="button" name="cancel" value="Cancel" ></td>
+</tr>
+
+</table>
+</form>

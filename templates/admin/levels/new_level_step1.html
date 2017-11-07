@@ -1,0 +1,54 @@
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('input[name="step1_submit"]').click(function(){
+		if($('select[name="cat_id"]').val()==0){
+			$('#alert1').html('Category is missing');
+		}else if($('input[name="img1"]').val()==0){
+			$('#alert1').html('Image 1 is missing');
+		}else if($('input[name="img2"]').val()==0){
+			$('#alert1').html('Image 2 is missing');
+		}else{
+			$('form[name="step1_form"]').submit();
+		}
+	});
+});
+</script>
+{/literal}
+<center>
+<div class="breadcrumbs"><a href="admin.php">Control Panel</a> >> <a href="admin.php?view=levels">levels</a> >> New Level</div>
+{alerts id="alert1"}{/alerts}
+<form method="post" enctype="multipart/form-data" action="admin.php?view=levels&action=new_level" name="step1_form">
+<table border="1" width="500">
+<tr>
+	<th>Level Name</th>
+	<td><input type="text" name="lv_name" value="{$_POST.cat_name}"></td>
+</tr>
+<tr>
+	<th>Category*</th>
+	<td><select name="cat_id">
+	<option value="0"></option>
+	{foreach from=$categories item=category}
+	<option value="{$category.cat_id}" {if $category.cat_id eq $level.cat_id} }selected="selected"{/if}>{$category.cat_name}</option>
+	{/foreach}</select></td>
+</tr>
+<tr>
+	<th>Image 1*</th>
+	<td><input type="file" name="img1"></td>
+</tr>
+<tr>
+	<th>Image 2*</th>
+	<td><input type="file" name="img2"></td>
+</tr>
+<tr>
+	<th>Active</th>
+	<td><input type="checkbox" name="lv_status" {if $_POST.lv_status || !isset($_POST.lv_status)} checked="checked"{/if}>Yes</td>
+</tr>
+<tr><input type="hidden" name="_submit1" value="true" >
+	<input type="hidden" name="step" value="1" >
+	<td colspan="2"><input type="button" name="step1_submit" value="continue" > </td>
+</tr>
+
+</table>
+</form>
+</center>

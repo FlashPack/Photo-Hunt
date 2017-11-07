@@ -1,0 +1,127 @@
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('.cat_active').click(function(){
+		_activate(this,'admin.php?view=levels&action=activate&ajax=true','lv_id');
+	});
+	$('.delete_btn').click(function(){
+		_delete(this,'admin.php?view=levels&action=delete&ajax=true','lv_id','#alert1');
+	});
+	$('input[name="save"]').click(function(){
+		selector=$(this).parent().children();
+		selector.each(function(){
+			if($(this).attr('type')!='button' && $(this)[0].nodeName!='BR'){
+				parent=$($(this).parent()).parent();
+				tds=$(parent).parent().children();
+				lv_id=$(tds[0]).find('input').val();
+				value=$(this).val();
+				text=$(this).find(':selected').text();
+				$.ajax({
+					type:'post',
+					url:'admin.php?view=levels&action=update_category&ajax=true',
+					data:'lv_id='+lv_id+'&cat_id='+value,
+					beforeSend:function(){
+						$('#alert1').html('<img src="templates/images/loading.gif" />');
+					},
+					success:function(response){
+						$('#alert1').html('<br>');
+						parent.find('.edit').hide();
+						parent.find('.text').html(value!='0'?text:'Uncategorized').show();
+					}
+				})
+			}
+		});
+	});
+	$('select[name="action"]').change(function(){
+		if($(this).val()!='0'){
+			if($('.checkbox:checked').length>=1){
+				if($(this).val()=='delete_selected'){
+					if(confirm('Are you sure ? ')){
+						$('form[name="form1"]').submit();
+						$('#alert1').html('<br>');
+					}
+				}else{
+					$('form[name="form1"]').submit();
+					$('#alert1').html('<br>');
+				}
+			}else{
+				$('#alert1').html('Please Select at least one Level');
+			}
+		}else{
+			$('#alert1').html('');
+		}
+	});
+});
+</script>
+{/literal}
+<center>
+<div class="breadcrumbs"><a href="admin.php">Control Panel</a> >> levels</div>
+{alerts id="alert1"}{/alerts}
+<div id="container"></div>
+<a href="admin.php?view=levels&action=new_level" id="new_lv_btn">New Level</a>
+<form method="post" name="form1">
+<table border="1" width="75%">
+<thead>
+<tr>
+	<th width="20">
+	<input type="checkbox" name="checkAll" value="checkbox" />
+	</th>
+	<th>
+	Name  
+	</th>
+	<th>
+	Thumbnail  
+	</th>
+	<th>
+	Category  
+	</th>
+	<th  width="50">
+	Active 
+	</th>
+	</th>
+	<th  width="50">
+	Edit
+	</th>
+	<th  width="50">
+	Delete 
+	</th>
+	
+</tr>
+</thead>
+{foreach from=$levels item=level}
+<tr>
+	<td>
+	<input type="checkbox" class="checkbox" name="lv_ids[]" value="{$level.lv_id}"  />
+	</td>
+	<td>
+	<!--<a href="javascript:;" class="text">{$level.lv_name}</a>-->{$level.lv_name}
+	<div class="edit"><input type="text" name="lv_name" value="{$level.lv_name}" size="15" /> <br><input type="button" name="save" value="Save"></div>
+	</td>
+	<td>
+	<img src="{$level_dir}{if $level.lv_thumbnail}{$level.lv_thumbnail}{else}default.jpg{/if}" width="120" height="120" /> &nbsp;
+	</td>
+	<td>
+	<a href="javascript:;" class="text">{if $level.cat_name}{$level.cat_name}{else}Uncategorized{/if}</a>
+	<div class="edit"><select name="lv_id"><option value="0"></option{foreach from=$categories item=category}<option value="{$category.cat_id}" {if $category.cat_id eq $level.cat_id }selected="selected"{/if}>{$category.cat_name}</option>{/foreach}</select><input type="button" name="save" value="Save"></div>
+	</td>
+	<td>
+	<input type="checkbox"  class="cat_active" rel="{$level.lv_id}" {if $level.lv_status} checked="checked" {/if}  />
+	</td>
+	<td>
+	<a href="admin.php?view=levels&action=edit&lv_id={$level.lv_id}" class="edit_btn" ><img src="{$template_dir}images/tool.png" /></a></td>
+	<td>
+	<a href="javascript:;" class="delete_btn" rel="{$level.lv_id}"><img src="{$template_dir}images/delete.png" /></a></td>
+</tr>
+{/foreach}
+</table>
+<div>{$pages}</div>
+<br>
+On Selected 
+<select name="action">
+	<option value="0"></option>
+	<option value="delete_selected">Delete</option>
+	<option value="activate_selected">Activate</option>
+	<option value="deactivate_selected">Deactivate</option>
+</select>
+</form>
+</center>
